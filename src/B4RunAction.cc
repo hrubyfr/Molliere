@@ -60,16 +60,16 @@ B4RunAction::B4RunAction()
   //
 
   // Creating histograms
-  analysisManager->CreateH1("Eabs","Edep in absorber", 500, 0., 1000*MeV);
-  analysisManager->CreateH1("Egap","Edep in gap", 100, 0., 1000*MeV);
+  analysisManager->CreateH1("Ecyl","Edep in cyllinder", 500, 0., 1000*MeV);
+  analysisManager->CreateH1("Eoutbox","Edep in box without cyllinder", 100, 0., 1000*MeV);
   analysisManager->CreateH1("Labs","trackL in absorber", 1000, 0., 1*m);
   analysisManager->CreateH1("Lgap","trackL in gap", 100, 0., 50*cm);
 
   // Creating ntuple
   //
   analysisManager->CreateNtuple("B4", "Edep and TrackL");
-  analysisManager->CreateNtupleDColumn("Eabs");
-  analysisManager->CreateNtupleDColumn("Egap");
+  analysisManager->CreateNtupleDColumn("Ecyl");
+  analysisManager->CreateNtupleDColumn("Eoutbox");
   analysisManager->CreateNtupleDColumn("Labs");
   analysisManager->CreateNtupleDColumn("Lgap");
   analysisManager->FinishNtuple();

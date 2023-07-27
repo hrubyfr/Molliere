@@ -56,12 +56,36 @@ void rootmacro(){
     Molliere_graph -> SetTitle ("Zavislost pomeru energie absorbovane ve valci a celkove absorbovane energie na polomeru valce");
     Molliere_graph -> GetXaxis() -> SetTitle ("radius (mm)");
     Molliere_graph -> GetYaxis() -> SetTitle ("frac");
+    Molliere_graph -> GetYaxis() -> SetRangeUser (0, 1.02);
 
-    auto Molliere_fun = new TF1 ("Molliere function", "-1/(x*[0])+1", 0, 50);
-    Molliere_fun->SetParameter(0, 0.5);
-    //Molliere_graph->Fit(Molliere_fun);
+    auto Molliere_fun = new TF1 ("Molliere function", "[0]/(x+[1])+[2]", 0, 50);
+    Molliere_fun->SetParameters(-1, 0, 1);
+    Molliere_graph->Fit(Molliere_fun);
     Molliere_graph->Draw("A*");
+    Molliere_fun->SetLineWidth(1);
     Molliere_fun->Draw("same");
+    auto line = new TLine(0, 0.9, 50.5, 0.9);
+    auto line2 = new TLine(32.32, 0., 32.32, 1.02);
+    auto line3 = new TLine(25.78, 0., 25.78, 1.02);
+
+    line2 -> SetLineColor(kOrange);
+    line3 -> SetLineColor(kBlue);
+    line->Draw("same");
+    line2->Draw("same");
+    line3->Draw("same");
+
+    auto legend = new TLegend (0.1, 0.7, 0.3, 0.9);
+    legend->AddEntry(Molliere_graph, "data", "erp");
+    legend->AddEntry(Molliere_fun, "fit funkce #frac{a}{x+b}+c", "l");
+    legend->AddEntry(line2, "změřená hodnota Moliérova poloměru", "l");
+    legend->AddEntry(line3, "tabulková hodnota Moliérova poloměru", "l");
+    legend->AddEntry((TObject*)0, TString::Format("#chi^{2}/ndf = %0.1f", (Molliere_fun->GetChisquare()/Molliere_fun->GetNDF())), "");
+    legend->AddEntry((TObject*)0, TString::Format("a = (%0.2f #pm %0.2f)", Molliere_fun->GetParameter(0),Molliere_fun->GetParError(0)), "");
+    legend->AddEntry((TObject*)0, TString::Format("b = (%0.2f #pm %0.2f)", Molliere_fun->GetParameter(1),Molliere_fun->GetParError(1)), "");
+    legend->AddEntry((TObject*)0, TString::Format("c = (%0.4f #pm %0.4f)", Molliere_fun->GetParameter(2),Molliere_fun->GetParError(2)), "");
+    legend->Draw("same");
+
+    std::cout << "chi/ndf =" << Molliere_fun->GetChisquare() / Molliere_fun->GetNDF() << "\n";
     }
 
 

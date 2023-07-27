@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 /// \file B4aEventAction.hh
 /// \brief Definition of the B4aEventAction class
 
@@ -49,31 +49,31 @@ class B4aEventAction : public G4UserEventAction
 
     virtual void  BeginOfEventAction(const G4Event* event);
     virtual void    EndOfEventAction(const G4Event* event);
-    
-    void AddAbs(G4double de, G4double dl);
-    void AddGap(G4double de, G4double dl);
-    
+
+    void AddCyl(G4double de, G4double dl);
+    void AddOutBox(G4double de, G4double dl);
+
   private:
-    G4double  fEnergyAbs;
-    G4double  fEnergyGap;
-    G4double  fTrackLAbs; 
+    G4double  fEnergyCyl;
+    G4double  fEnergyOutBox;
+    G4double  fTrackLAbs;
     G4double  fTrackLGap;
 };
 
 // inline functions
 
-inline void B4aEventAction::AddAbs(G4double de, G4double dl) {
-  fEnergyAbs += de; 
+inline void B4aEventAction::AddCyl(G4double de, G4double dl) {
+  fEnergyCyl += de;
   fTrackLAbs += dl;
 }
 
-inline void B4aEventAction::AddGap(G4double de, G4double dl) {
-  fEnergyGap += de; 
+inline void B4aEventAction::AddOutBox(G4double de, G4double dl) {
+  fEnergyOutBox += de;
   fTrackLGap += dl;
 }
-                     
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
-    
+

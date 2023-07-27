@@ -42,8 +42,8 @@
 
 B4aEventAction::B4aEventAction()
  : G4UserEventAction(),
-   fEnergyAbs(0.),
-   fEnergyGap(0.),
+   fEnergyCyl(0.),
+   fEnergyOutBox(0.),
    fTrackLAbs(0.),
    fTrackLGap(0.)
 {}
@@ -58,8 +58,8 @@ B4aEventAction::~B4aEventAction()
 void B4aEventAction::BeginOfEventAction(const G4Event* /*event*/)
 {
   // initialisation per event
-  fEnergyAbs = 0.;
-  fEnergyGap = 0.;
+  fEnergyCyl = 0.;
+  fEnergyOutBox = 0.;
   fTrackLAbs = 0.;
   fTrackLGap = 0.;
 }
@@ -75,14 +75,14 @@ void B4aEventAction::EndOfEventAction(const G4Event* event)
   auto analysisManager = G4AnalysisManager::Instance();
 
   // fill histograms
-  analysisManager->FillH1(0, fEnergyAbs);
-  analysisManager->FillH1(1, fEnergyGap);
+  analysisManager->FillH1(0, fEnergyCyl);
+  analysisManager->FillH1(1, fEnergyOutBox);
   analysisManager->FillH1(2, fTrackLAbs);
   analysisManager->FillH1(3, fTrackLGap);
 
   // fill ntuple
-  analysisManager->FillNtupleDColumn(0, fEnergyAbs);
-  analysisManager->FillNtupleDColumn(1, fEnergyGap);
+  analysisManager->FillNtupleDColumn(0, fEnergyCyl);
+  analysisManager->FillNtupleDColumn(1, fEnergyOutBox);
   analysisManager->FillNtupleDColumn(2, fTrackLAbs);
   analysisManager->FillNtupleDColumn(3, fTrackLGap);
   analysisManager->AddNtupleRow();
@@ -96,12 +96,12 @@ void B4aEventAction::EndOfEventAction(const G4Event* event)
 
     G4cout
        << "   Cyllinder: total energy: " << std::setw(7)
-                                        << G4BestUnit(fEnergyAbs,"Energy")
+                                        << G4BestUnit(fEnergyCyl,"Energy")
        << "       total track length: " << std::setw(7)
                                         << G4BestUnit(fTrackLAbs,"Length")
        << G4endl
        << "    Outer Box: total energy: " << std::setw(7)
-                                        << G4BestUnit(fEnergyGap,"Energy")
+                                        << G4BestUnit(fEnergyOutBox,"Energy")
        << "       total track length: " << std::setw(7)
                                         << G4BestUnit(fTrackLGap,"Length")
        << G4endl;

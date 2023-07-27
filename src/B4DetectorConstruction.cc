@@ -60,8 +60,8 @@ G4GlobalMagFieldMessenger* B4DetectorConstruction::fMagFieldMessenger = nullptr;
 
 B4DetectorConstruction::B4DetectorConstruction()
  : G4VUserDetectorConstruction(),
-   fAbsorberPV(nullptr),
-   fGapPV(nullptr),
+   fCyllinderPV(nullptr),
+   fOutBoxPV(nullptr),
    fCheckOverlaps(true)
 {
 }
@@ -89,7 +89,7 @@ void B4DetectorConstruction::DefineMaterials()
 {
   // Lead material defined using NIST Manager
   auto nistManager = G4NistManager::Instance();
-  nistManager->FindOrBuildMaterial("G4_Pb");
+  nistManager->FindOrBuildMaterial("G4_BGO");
   nistManager->FindOrBuildMaterial("G4_Galactic");
   // Print materials
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
@@ -102,7 +102,7 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
   // Geometry parameters
   G4double boxsizeXY = 100.*cm;
   G4double cyllinder_inner_radius  = 0.*cm;
-  G4double cyllinder_outer_radius = 16.02*mm;
+  G4double cyllinder_outer_radius = 46.*mm;
   G4double length = 100.*cm;
   G4double cyllinder_startangle = 0.*deg;
   G4double cyllinder_endangle = 360.*deg;
@@ -111,7 +111,7 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
   G4double worldlength = 2. * length;
 
   // Get materials
-  auto defaultMaterial = G4Material::GetMaterial("G4_Pb");
+  auto defaultMaterial = G4Material::GetMaterial("G4_BGO");
   auto worldMaterial = G4Material::GetMaterial("G4_Galactic");
 
   if ( ! defaultMaterial) {
@@ -151,7 +151,7 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
 
   auto boxS = new G4Box ("Box", boxsizeXY/2, boxsizeXY/2, length);
   auto boxLV = new G4LogicalVolume (boxS, defaultMaterial, "Box");
-  fGapPV = new G4PVPlacement (0, G4ThreeVector(), boxLV, "Box", worldLV, false, 0, fCheckOverlaps);
+  fOutBoxPV = new G4PVPlacement (0, G4ThreeVector(), boxLV, "Box", worldLV, false, 0, fCheckOverlaps);
 
   //
   // CYllinder
@@ -164,7 +164,7 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
                  cyllinderS,     // its solid
                  defaultMaterial,  // its material
                  "Cyllinder");   // its name
-  fAbsorberPV
+  fCyllinderPV
     = new G4PVPlacement(
                  0,                // no rotation
                  G4ThreeVector(),  // at (0,0,0)
@@ -180,10 +180,14 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
 
 
   auto simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+  auto worldVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
+
+  worldVisAtt->SetVisibility(false);
   simpleBoxVisAtt->SetVisibility(true);
+
   boxLV->SetVisAttributes(simpleBoxVisAtt);
   cyllinderLV->SetVisAttributes(simpleBoxVisAtt);
-
+  worldLV->SetVisAttributes(worldVisAtt);
 
   //
   // Always return the physical World

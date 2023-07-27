@@ -1,0 +1,10 @@
+#/run/numberOfThreads 2
+/run/initialize
+
+/gun/energy 1 GeV
+/gun/particle e-
+
+
+/run/printProgress 100
+/run/beamOn 10000
+
