@@ -1,8 +1,8 @@
 /run/verbose 2
-/run/initialize /control/execute vis.mac
-/vis/open OGL 600x600-0+0
-/vis/sceneHandler/create OGL
-/vis/viewer/create ! ! 600x600-0+0
+/run/initialize /control/execute vis.ma/tracking/storeTrajectory 2
+/run/printProgress 100
+/gun/energy 1 GeV
+create ! ! 600x600-0+0
 /vis/viewer/refresh
 /vis/viewer/set/autoRefresh false
 /vis/verbose errors
@@ -51,9 +51,14 @@
 /gui/addButton viewer "Flush viewer (= refresh + update)" "/vis/viewer/flush"
 /gui/addButton viewer "Update scene" "/vis/scene/notifyHandlers"
 /run/printProgress 100
+/gun/energy 1 GeV
+/run/beamOn 1
+/run/beamOn 1
 /vis/viewer/set/projection p
 /vis/viewer/refresh
-/vis/viewer/set/projection o
+/vis/viewer/set/picking false
 /vis/viewer/refresh
-/vis/viewer/set/projection p
+/vis/viewer/set/picking true
+/vis/viewer/refresh
+/vis/viewer/set/picking false
 /vis/viewer/refresh
